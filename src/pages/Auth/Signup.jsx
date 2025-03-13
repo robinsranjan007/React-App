@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Make sure axios is installed (npm install axios)
+import axios from 'axios';
 
 const SignUp = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [age, setAge] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,12 +16,16 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
 
     const userData = {
+      firstName,
+      lastName,
+      age,
       username,
       email,
       password, // In production, hash this password before saving
@@ -31,8 +38,15 @@ const SignUp = () => {
     try {
       // Send the data to JSON Server
       await axios.post('http://localhost:5000/users', userData);
+
+      // Save the username in localStorage upon successful registration
+      localStorage.setItem('username', username);
+      localStorage.setItem('email', email);
+      localStorage.setItem('name', `${firstName} ${lastName}`);
+
+      // Redirect to the home page after successful registration
       alert("Account created successfully!");
-      navigate('/login'); // Redirect to login page after successful registration
+      navigate('/'); 
     } catch (error) {
       console.error("Error registering user:", error);
       alert("There was an error registering your account.");
@@ -40,7 +54,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG1vdmllcyUyMGJsYWNrfGVufDB8fDB8fHww')" }}>
+    <div className="flex justify-center items-center min-h-screen bg-cover bg-center"
+         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG1vdmllcyUyMGJsYWNrfGVufDB8fDB8fHww')" }}>
       <div className="bg-opacity-90 bg-black text-white p-8 rounded-lg shadow-xl w-96">
         <div className="text-center mb-8">
           <div className="text-4xl font-bold">
@@ -50,6 +65,45 @@ const SignUp = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* First Name Field */}
+          <div className="mb-6">
+            <label className="block mb-2 text-sm text-gray-400">First Name</label>
+            <input
+              type="text"
+              placeholder="Enter your first name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
+            />
+          </div>
+
+          {/* Last Name Field */}
+          <div className="mb-6">
+            <label className="block mb-2 text-sm text-gray-400">Last Name</label>
+            <input
+              type="text"
+              placeholder="Enter your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
+            />
+          </div>
+
+          {/* Age Field */}
+          <div className="mb-6">
+            <label className="block mb-2 text-sm text-gray-400">Age</label>
+            <input
+              type="number"
+              placeholder="Enter your age"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
+            />
+          </div>
+
           {/* Username Field */}
           <div className="mb-6">
             <label className="block mb-2 text-sm text-gray-400">Username</label>
@@ -59,6 +113,7 @@ const SignUp = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
           </div>
 
@@ -71,6 +126,7 @@ const SignUp = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
           </div>
 
@@ -83,6 +139,7 @@ const SignUp = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
           </div>
 
@@ -95,6 +152,7 @@ const SignUp = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              required
             />
           </div>
 

@@ -5,6 +5,7 @@ import Movies from '../pages/user/Movies';
 import TvShows from '../pages/user/Tvshows';
 import Login from '../pages/Auth/Login';
 import Signup from '../pages/Auth/Signup';
+import MyProfile from '../pages/Auth/myprofile/Myprofile';  // Import the profile page
 import Movieslist from '../pages/admin/Movieslist';
 import Tvshowlists from '../pages/admin/Tvshowlists';
 import Userslist from '../pages/admin/Userslists';
@@ -17,6 +18,7 @@ const RouterComponent = ({ isAdmin }) => {
       <Route path="/tv-shows" element={<TvShows />} />  
       <Route path="/login" element={<Login />} />   
       <Route path="/signup" element={<Signup />} />  
+      <Route path="/profile" element={<MyProfile />} />  {/* Add profile route */}
 
       {/* Conditionally render admin routes if the user is an admin */}
       {isAdmin && (
