@@ -1,0 +1,36 @@
+{
+  "movies": [
+    {
+      "id": "1",
+      "title": "Inception",
+      "year": 2010
+    },
+    {
+      "id": "2",
+      "title": "Interstellar",
+      "year": 2014
+    }
+  ],
+  "users": [
+    {
+      "id": "df2b",
+      "username": "robins007",
+      "email": "robinsranjan007@gmail.com",
+      "password": "robins007",
+      "playlist": [],
+      "ratings": [],
+      "reviews": [],
+      "likedMovies": []
+    },
+    {
+      "id": "d961",
+      "username": " josh",
+      "email": "josh@gmail.com",
+      "password": "josh",
+      "playlist": [],
+      "ratings": [],
+      "reviews": [],
+      "likedMovies": []
+    }
+  ]
+}
