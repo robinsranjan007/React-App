@@ -6,21 +6,6 @@ import { Link } from "react-router-dom";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-// ✅ Genre Mapping from TMDb API
-const genreMap = {
-  28: "Action",
-  12: "Adventure",
-  16: "Animation",
-  35: "Comedy",
-  80: "Crime",
-  18: "Drama",
-  14: "Fantasy",
-  27: "Horror",
-  10749: "Romance",
-  878: "Sci-Fi",
-  53: "Thriller",
-};
-
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
@@ -28,11 +13,25 @@ const Movies = () => {
   const [sortBy, setSortBy] = useState("trending");
   const [genre, setGenre] = useState("");
   const [page, setPage] = useState(1);
-  const totalPages = 25; // ✅ Fetching 25 pages (500 movies)
+  const [genresList, setGenresList] = useState({}); // ✅ Genre mapping
+  const totalPages = 25; // ✅ Fetching 500 movies
 
   useEffect(() => {
+    fetchGenres(); // ✅ Fetch genres first
     fetchMovies();
   }, [sortBy, genre, searchQuery]);
+
+  // ✅ Fetch Genres (TMDb API)
+  const fetchGenres = async () => {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`
+    );
+    const genres = response.data.genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+    setGenresList(genres);
+  };
 
   // ✅ Fetch 25 Pages (500 Movies)
   const fetchMovies = async () => {
@@ -141,9 +140,19 @@ const Movies = () => {
               {/* Movie Details */}
               <div className="p-2">
                 <h2 className="text-lg font-semibold mt-2">{movie.title}</h2>
-                <p className="text-gray-400 text-sm">⭐ {movie.vote_average}</p>
-                <p className="text-gray-300 text-sm">
-                  🎭 {movie.genre_ids.map((id) => genreMap[id] || "Unknown").join(", ")}
+                <p className="text-gray-400 text-sm">⭐ TMDb: {movie.vote_average}</p>
+
+                {/* ✅ Display Genre Names */}
+                <p className="text-gray-400 text-sm">
+                  🎭 {movie.genre_ids.map((id) => genresList[id]).join(", ")}
+                </p>
+
+                {/* ✅ Display Release Date */}
+                <p className="text-gray-400 text-sm">📅 {movie.release_date}</p>
+
+                {/* ✅ Short Movie Description */}
+                <p className="text-gray-500 text-sm line-clamp-2">
+                  {movie.overview || "No description available."}
                 </p>
 
                 {/* View Details Button */}
@@ -158,44 +167,56 @@ const Movies = () => {
           ))}
         </div>
 
-        {/* Pagination Controls */}
-        <div className="flex justify-center mt-6 space-x-4 items-center">
-          <button
-            onClick={prevPage}
-            disabled={page === 1}
-            className={`px-4 py-2 text-white rounded ${
-              page === 1 ? "bg-gray-500 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
-            }`}
-          >
-            ❮ Previous
-          </button>
+        {/* ✅ Pagination Controls */}
+        <div className="flex flex-col items-center mt-6">
+          {/* ✅ Page X/Y Display */}
+          <div className="flex items-center space-x-4 mb-3">
+            <button
+              onClick={prevPage}
+              disabled={page === 1}
+              className={`px-4 py-2 text-white rounded ${
+                page === 1
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+            >
+              ❮ Prev
+            </button>
+            <span className="text-black text-lg">
+              Page <span className="font-bold">{page}</span> /{" "}
+              <span className="font-bold">{totalPagesAvailable}</span>
+            </span>
+            <button
+              onClick={nextPage}
+              disabled={page === totalPagesAvailable}
+              className={`px-4 py-2 text-white rounded ${
+                page === totalPagesAvailable
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+            >
+              Next ❯
+            </button>
+          </div>
 
-          {/* ✅ Page Number Input */}
-          <span className="text-white text-lg">
-            Page{" "}
-            <input
-              type="number"
-              value={page}
-              onChange={(e) => {
-                const newPage = parseInt(e.target.value);
-                if (newPage > 0 && newPage <= totalPagesAvailable) {
-                  setPage(newPage);
-                }
-              }}
-              className="w-12 text-center text-black rounded p-1"
-            />{" "}
-            of {totalPagesAvailable}
-          </span>
-
-          <button
-            onClick={nextPage}
-            disabled={page === totalPagesAvailable}
-            className={`px-4 py-2 text-white rounded ${
-              page === totalPagesAvailable ? "bg-gray-500 cursor-not-allowed" : "bg-red-600 hover:bg-red-700"
-            }`}
-          >
-            Next ❯
-          </button>
+          {/* ✅ All Page Numbers (Clickable) */}
+          <div className="flex flex-wrap justify-center space-x-2">
+            {Array.from({ length: totalPagesAvailable }, (_, i) => i + 1).map(
+              (pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => setPage(pageNumber)}
+                  className={`px-3 py-2 text-white rounded mb-2 ${
+                    page === pageNumber
+                      ? "bg-red-600 font-bold"
+                      : "bg-gray-700 hover:bg-gray-600"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              )
+            )}
+          </div>
         </div>
       </div>
     </div>
