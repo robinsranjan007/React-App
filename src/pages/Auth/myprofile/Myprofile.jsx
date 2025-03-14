@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaCamera } from 'react-icons/fa';
 import UpdateProfileInfo from '../myprofile/updateinfo/updateuserprofile';
 
 const MyProfile = () => {
@@ -21,7 +21,7 @@ const MyProfile = () => {
   }, []);
 
   const handleSave = (updatedUser) => {
-    setUser(updatedUser); // Update the state with the new user data after successful update
+    setUser(updatedUser);
   };
 
   if (!user) {
@@ -39,18 +39,18 @@ const MyProfile = () => {
         {/* Profile Header */}
         <h2 className="text-3xl font-bold mb-6 text-white-500">My Profile</h2>
 
-        {/* Profile Icon */}
-        <div className="relative text-white-500">
-          <FaUserCircle size={128} className="mx-auto mb-4" />
+        {/* Profile Icon with Camera Icon */}
+        <div className="relative inline-block">
+          <FaUserCircle size={128} className="mx-auto mb-4 text-gray-400" />
 
-          {/* Update Profile Button */}
-          <button
-            onClick={() => setIsModalOpen(true)} // Open the modal on button click
-            className="absolute bottom-0 right-0 bg-gray-700 text-white p-2 rounded-full transition duration-200 hover:bg-gray-600"
+          {/* Camera Icon - Always Visible */}
+          <div 
+            className="absolute bottom-4 right-4 bg-gray-700 p-2 rounded-full text-white cursor-pointer hover:bg-gray-600 transition duration-200"
             title="Update Profile Picture"
+            onClick={() => setIsModalOpen(true)} // Open the modal
           >
-            <FaUserCircle size={20} />
-          </button>
+            <FaCamera size={18} />
+          </div>
         </div>
 
         {/* User Details */}
@@ -63,7 +63,7 @@ const MyProfile = () => {
 
         {/* Update Button */}
         <button 
-          onClick={() => setIsModalOpen(true)} // Open the modal on button click
+          onClick={() => setIsModalOpen(true)}
           className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded transition duration-300"
         >
           Update Profile
@@ -73,9 +73,9 @@ const MyProfile = () => {
       {/* Modal to update profile */}
       {isModalOpen && (
         <UpdateProfileInfo
-          user={user} // Pass the current user data to the modal
-          onSave={handleSave} // Callback to update the user data in the parent component
-          onClose={() => setIsModalOpen(false)} // Close the modal
+          user={user}
+          onSave={handleSave}
+          onClose={() => setIsModalOpen(false)}
         />
       )}
     </div>

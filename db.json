@@ -1,13 +1,46 @@
 {
   "users": [
     {
-      "firstName": "Vegeta",
-      "lastName": "goku",
-      "age": "25",
-      "username": "Goku",
-      "email": "vegeta@gmail.com",
-      "password": "vegeta",
-      "id": "ef23"
+      "id": "ef23",
+      "firstName": "Robins",
+      "lastName": "Ranjan",
+      "age": "24",
+      "username": "Robins",
+      "email": "Robins@gmail.com",
+      "password": "robins",
+      "playlist": [],
+      "likedMovies": [],
+      "ratings": [],
+      "reviews": []
+    }
+  ],
+
+  "movies": [],
+
+  "ratings": [
+    {
+      "id": 1,
+      "movieId": "tt3896198",
+      "userId": "ef23",
+      "rating": 4.5
+    }
+  ],
+
+  "reviews": [
+    {
+      "id": 1,
+      "movieId": "tt3896198",
+      "userId": "ef23",
+      "comment": "Great movie!",
+      "timestamp": "2025-03-13T12:00:00Z"
+    }
+  ],
+
+  "likes": [
+    {
+      "id": 1,
+      "movieId": "tt3896198",
+      "userId": "ef23"
     }
   ]
 }
