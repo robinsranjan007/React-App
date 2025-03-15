@@ -199,24 +199,7 @@ const Movies = () => {
             </button>
           </div>
 
-          {/* ✅ All Page Numbers (Clickable) */}
-          <div className="flex flex-wrap justify-center space-x-2">
-            {Array.from({ length: totalPagesAvailable }, (_, i) => i + 1).map(
-              (pageNumber) => (
-                <button
-                  key={pageNumber}
-                  onClick={() => setPage(pageNumber)}
-                  className={`px-3 py-2 text-white rounded mb-2 ${
-                    page === pageNumber
-                      ? "bg-red-600 font-bold"
-                      : "bg-gray-700 hover:bg-gray-600"
-                  }`}
-                >
-                  {pageNumber}
-                </button>
-              )
-            )}
-          </div>
+         
         </div>
       </div>
     </div>

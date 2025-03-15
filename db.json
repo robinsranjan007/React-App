@@ -10,37 +10,94 @@
       "password": "robins",
       "playlist": [],
       "likedMovies": [],
+      "watchLater": [],
       "ratings": [],
       "reviews": []
-    }
-  ],
-
-  "movies": [],
-
-  "ratings": [
+    },
     {
-      "id": 1,
-      "movieId": "tt3896198",
-      "userId": "ef23",
-      "rating": 4.5
-    }
-  ],
-
-  "reviews": [
-    {
-      "id": 1,
-      "movieId": "tt3896198",
-      "userId": "ef23",
-      "comment": "Great movie!",
-      "timestamp": "2025-03-13T12:00:00Z"
-    }
-  ],
-
-  "likes": [
-    {
-      "id": 1,
-      "movieId": "tt3896198",
-      "userId": "ef23"
+      "id": "1493",
+      "firstName": "Vegeta",
+      "lastName": "monkey",
+      "age": "90",
+      "username": "monkeyvegeta",
+      "email": "monkey@gmail.com",
+      "password": "hello",
+      "playlist": [],
+      "ratings": [],
+      "reviews": [],
+      "likedMovies": [
+        {
+          "id": 850920,
+          "title": "The Parenting",
+          "poster": "/5lMu14IMuHo0hKYCwCIogt7IioX.jpg"
+        },
+        {
+          "id": 516729,
+          "title": "Paddington in Peru",
+          "poster": "/1ffZAucqfvQu36x1C49XfOdjuOG.jpg"
+        },
+        {
+          "id": 1000837,
+          "title": "I'm Still Here",
+          "poster": "/gZnsMbhCvhzAQlKaVpeFRHYjGyb.jpg"
+        },
+        {
+          "id": 1357633,
+          "title": "Solo Leveling -ReAwakening-",
+          "poster": "/dblIFen0bNZAq8icJXHwrjfymDW.jpg"
+        },
+        {
+          "id": 1241982,
+          "title": "Moana 2",
+          "poster": "/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg"
+        },
+        {
+          "id": 238,
+          "title": "The Godfather",
+          "poster": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
+        },
+        {
+          "id": 1064213,
+          "title": "Anora",
+          "poster": "/qh8m8Udz0sCa5gy9VaqfHPh0yPM.jpg"
+        },
+        {
+          "id": 1149167,
+          "title": "High Rollers",
+          "poster": "/hHowAaChDjwueySmwVbsjHmpWa.jpg"
+        }
+      ],
+      "watchLater": [
+        {
+          "id": 777443,
+          "title": "The Electric State",
+          "poster": "/1TZ9Er1xEAKizzKKqYVgJIhNkN2.jpg"
+        }
+      ],
+      "likedTvShows": [
+        {
+          "id": 108978,
+          "title": "Reacher",
+          "poster": "/31GlRQMiDunO8cl3NxTz34U64rf.jpg"
+        },
+        {
+          "id": 71914,
+          "title": "The Wheel of Time",
+          "poster": "/eVm7vI0VTUKYzgpOXCUu9qz3L4E.jpg"
+        }
+      ],
+      "watchLaterTvShows": [
+        {
+          "id": 71914,
+          "title": "The Wheel of Time",
+          "poster": "/eVm7vI0VTUKYzgpOXCUu9qz3L4E.jpg"
+        },
+        {
+          "id": 108978,
+          "title": "Reacher",
+          "poster": "/31GlRQMiDunO8cl3NxTz34U64rf.jpg"
+        }
+      ]
     }
   ]
 }

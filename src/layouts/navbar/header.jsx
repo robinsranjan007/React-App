@@ -1,29 +1,27 @@
-import { FaHome, FaFilm, FaTv, FaUserCircle } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import React from 'react';
+import { FaHome, FaFilm, FaTv, FaUserCircle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 const Header = () => {
-  // Retrieve the username from localStorage
-  const username = localStorage.getItem('username');
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = () => {
-    // Remove user data from localStorage
-    localStorage.removeItem('username');
-    localStorage.removeItem('userId');  // Remove user ID if you're storing it too
-    
-    // Redirect to login page after logging out
-    navigate('/login');
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
+    navigate("/login");
   };
 
   return (
-    <nav className="bg-black bg-opacity-70 p-4 shadow-lg">
+    <nav className="bg-black bg-opacity-70 p-4 shadow-lg relative z-50">
       <div className="container mx-auto flex items-center justify-between">
-        
+        {/* Logo */}
         <div className="text-white font-bold text-lg">
           Flix<span className="text-red-500">Net</span>
         </div>
 
+        {/* Navigation Links */}
         <div className="flex space-x-6 ml-20">
           <Link to="/" className="text-white hover:text-red-400">
             <FaHome className="inline mr-2" /> Home
@@ -37,46 +35,51 @@ const Header = () => {
         </div>
 
         {/* Profile Icon & Dropdown */}
-        <div className="relative group ml-auto">
-          {/* User Icon */}
-          <FaUserCircle className="text-white text-3xl cursor-pointer group-hover:text-red-400" />
+        <div className="relative ml-auto">
+          {/* ✅ Clickable Profile Icon */}
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="text-white text-3xl cursor-pointer focus:outline-none"
+          >
+            <FaUserCircle />
+          </button>
 
-          {/* Dropdown Menu (Shows on Hover) */}
-          <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            {username ? (
-              <>
-                {/* Show My Profile if logged in */}
-                <Link 
-                  to="/profile" 
-                  className="block px-4 py-2 text-black hover:bg-gray-200">
-                  My Profile
-                </Link>
-                {/* Logout Option */}
-                <div 
-                  onClick={handleLogout}
-                  className="block px-4 py-2 text-black hover:bg-gray-200 cursor-pointer">
-                  Logout
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Show Login & Admin only if not logged in */}
-                <Link 
-                  to="/login" 
-                  className="block px-4 py-2 text-black hover:bg-gray-200">
-                  Login
-                </Link>
-                <Link 
-                  to="/login" 
-                  className="block px-4 py-2 text-black hover:bg-gray-200">
-                  Admin
-                </Link>
-              </>
-            )}
-          </div>
+          {/* ✅ Dropdown (Shows when dropdownOpen is true) */}
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 min-w-[160px] bg-white shadow-lg rounded-lg z-50">
+              {username ? (
+                <>
+                  <Link to="/profile" className="block px-4 py-2 text-black hover:bg-gray-200">
+                    My Profile
+                  </Link>
+                  <Link to="/favorites" className="block px-4 py-2 text-black hover:bg-gray-200">
+                    Favorites
+                  </Link>
+                  <Link to="/watchlater" className="block px-4 py-2 text-black hover:bg-gray-200">
+                    Watch Later
+                  </Link>
+                  <div
+                    onClick={handleLogout}
+                    className="block px-4 py-2 text-black hover:bg-gray-200 cursor-pointer"
+                  >
+                    Logout
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="block px-4 py-2 text-black hover:bg-gray-200">
+                    Login
+                  </Link>
+                  <Link to="/signup" className="block px-4 py-2 text-black hover:bg-gray-200">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Display username or "User" if not logged in */}
+        {/* Display Username */}
         <span className="ml-2 text-white">{username || "User"}</span>
       </div>
     </nav>
