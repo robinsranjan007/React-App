@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaClock } from "react-icons/fa";
+import ReviewsAndRatings from "./Reviewsandratings";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -10,10 +11,12 @@ const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 const Tvshowdetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
   const [tvShow, setTvShow] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const userId = localStorage.getItem("userId");
+
   const [favorites, setFavorites] = useState([]);
   const [watchLater, setWatchLater] = useState([]);
 
@@ -66,7 +69,7 @@ const Tvshowdetails = () => {
 
     try {
       await axios.patch(`http://localhost:5000/users/${userId}`, { likedTvShows: updatedFavorites });
-      setFavorites(updatedFavorites); // ✅ Update UI immediately
+      setFavorites(updatedFavorites);
       alert("TV Show added to favorites!");
     } catch (error) {
       console.error("Error adding to favorites:", error);
@@ -89,7 +92,7 @@ const Tvshowdetails = () => {
 
     try {
       await axios.patch(`http://localhost:5000/users/${userId}`, { watchLaterTvShows: updatedWatchLater });
-      setWatchLater(updatedWatchLater); // ✅ Update UI immediately
+      setWatchLater(updatedWatchLater);
       alert("TV Show added to Watch Later!");
     } catch (error) {
       console.error("Error adding to Watch Later:", error);
@@ -191,6 +194,9 @@ const Tvshowdetails = () => {
             <FaClock /> <span>{watchLater.some((s) => s.id === tvShow.id) ? "Added to Watch Later" : "Watch Later"}</span>
           </button>
         </div>
+
+        {/* ✅ Reviews & Ratings Component */}
+        <ReviewsAndRatings movieId={id} isTvShow={true} />
       </div>
     </div>
   );

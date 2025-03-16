@@ -3,164 +3,127 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [age, setAge] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    age: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
   const navigate = useNavigate();
 
-  // Handle form submission
+  // Handle form input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle Signup
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
 
-    const userData = {
-      firstName,
-      lastName,
-      age,
-      username,
-      email,
-      password, // In production, hash this password before saving
+    const newUser = {
+      ...formData,
       playlist: [],
+      likedMovies: [],
+      watchLater: [],
       ratings: [],
       reviews: [],
-      likedMovies: [],
     };
 
     try {
-      // Send the data to JSON Server
-      await axios.post('http://localhost:5000/users', userData);
+      const response = await axios.post('http://localhost:5000/users', newUser);
+      console.log("User Registered:", response.data);
 
-      // Save the username in localStorage upon successful registration
-      localStorage.setItem('username', username);
-      localStorage.setItem('email', email);
-      localStorage.setItem('name', `${firstName} ${lastName}`);
+      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('userId', response.data.id);
 
-      // Redirect to the home page after successful registration
-      alert("Account created successfully!");
-      navigate('/'); 
+      alert("Signup successful!");
+      navigate('/');
     } catch (error) {
-      console.error("Error registering user:", error);
-      alert("There was an error registering your account.");
+      console.error("Signup Error:", error);
+      alert("Failed to register user.");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-cover bg-center"
+    <div className="flex justify-center items-center min-h-screen bg-cover bg-center px-4"
          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG1vdmllcyUyMGJsYWNrfGVufDB8fDB8fHww')" }}>
-      <div className="bg-opacity-90 bg-black text-white p-8 rounded-lg shadow-xl w-96">
-        <div className="text-center mb-8">
-          <div className="text-4xl font-bold">
+      <div className="bg-black bg-opacity-90 text-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div className="text-center mb-6">
+          <h1 className="text-4xl font-bold">
             Flix<span className="text-red-600">Net</span>
-          </div>
+          </h1>
           <p className="text-gray-400 mt-2">Create a new account</p>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* First Name Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">First Name</label>
-            <input
-              type="text"
-              placeholder="Enter your first name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* First Name */}
+          <div>
+            <label className="block text-gray-400">First Name</label>
+            <input type="text" name="firstName" placeholder="Enter your first name"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.firstName} onChange={handleChange} required />
           </div>
 
-          {/* Last Name Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Last Name</label>
-            <input
-              type="text"
-              placeholder="Enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Last Name */}
+          <div>
+            <label className="block text-gray-400">Last Name</label>
+            <input type="text" name="lastName" placeholder="Enter your last name"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.lastName} onChange={handleChange} required />
           </div>
 
-          {/* Age Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Age</label>
-            <input
-              type="number"
-              placeholder="Enter your age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Age */}
+          <div>
+            <label className="block text-gray-400">Age</label>
+            <input type="number" name="age" placeholder="Enter your age"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.age} onChange={handleChange} required />
           </div>
 
-          {/* Username Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Username</label>
-            <input
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Username */}
+          <div>
+            <label className="block text-gray-400">Username</label>
+            <input type="text" name="username" placeholder="Enter your username"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.username} onChange={handleChange} required />
           </div>
 
-          {/* Email Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Email</label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Email */}
+          <div>
+            <label className="block text-gray-400">Email</label>
+            <input type="email" name="email" placeholder="Enter your email"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.email} onChange={handleChange} required />
           </div>
 
-          {/* Password Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Password */}
+          <div>
+            <label className="block text-gray-400">Password</label>
+            <input type="password" name="password" placeholder="Enter your password"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.password} onChange={handleChange} required />
           </div>
 
-          {/* Confirm Password Field */}
-          <div className="mb-6">
-            <label className="block mb-2 text-sm text-gray-400">Confirm Password</label>
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-gray-400">Confirm Password</label>
+            <input type="password" name="confirmPassword" placeholder="Confirm your password"
+                   className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                   value={formData.confirmPassword} onChange={handleChange} required />
           </div>
 
           {/* Sign Up Button */}
-          <button
-            type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-          >
+          <button type="submit"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
             Sign Up
           </button>
         </form>

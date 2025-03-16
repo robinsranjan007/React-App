@@ -19,11 +19,13 @@ const Login = () => {
       const user = users.find((u) => u.username === username && u.password === password);
 
       if (user) {
-        // Store user details in localStorage
+        // Store user details in localStorage **(Ensure userId is stored)**
         localStorage.setItem("username", user.username);
         localStorage.setItem("userId", user.id);
+        localStorage.setItem("email", user.email);
+        localStorage.setItem("name", `${user.firstName} ${user.lastName}`);
 
-        // Redirect to home page after login
+        alert("Login successful!");
         navigate("/");
       } else {
         setError("Invalid username or password.");
@@ -35,7 +37,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG1vdmllcyUyMGJsYWNrfGVufDB8fDB8fHww')" }}>
+    <div className="flex justify-center items-center min-h-screen bg-cover bg-center" 
+         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop&q=60')" }}>
       <div className="bg-opacity-90 bg-black text-white p-8 rounded-lg shadow-xl w-96">
         <div className="text-center mb-8">
           <div className="text-4xl font-bold">
@@ -44,11 +47,9 @@ const Login = () => {
           <p className="text-gray-400 mt-2">Sign in to your account</p>
         </div>
 
-        {/* Error Message */}
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleLogin}>
-          {/* Username Field */}
           <div className="mb-6">
             <label className="block mb-2 text-sm text-gray-400">Username</label>
             <input
@@ -61,7 +62,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Field */}
           <div className="mb-6">
             <label className="block mb-2 text-sm text-gray-400">Password</label>
             <input
@@ -74,13 +74,11 @@ const Login = () => {
             />
           </div>
 
-          {/* Login Button */}
           <button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
             Log In
           </button>
         </form>
 
-        {/* Sign Up Link */}
         <div className="text-center mt-4 text-gray-400">
           <p>Don't have an account? <Link to="/signup" className="text-red-500 hover:text-red-600">Sign up now</Link></p>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Home from "../pages/user/HomePage/Home";
 import Movies from "../pages/user/movies/Movies";
 import MoviesDetails from "../pages/Details/Moivesdetails";
@@ -8,11 +8,16 @@ import Tvshowdetails from "../pages/Details/Tvshowdetails";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import MyProfile from "../pages/Auth/myprofile/Myprofile";
-import Favorites from "../pages/user/Favorite/Favorites"; // ✅ Correct import for Favorites
-import WatchLater from "../pages/user/Watchlater/Watchlater"; // ✅ Correct import for Watch Later
+import Favorites from "../pages/user/Favorite/Favorites";
+import WatchLater from "../pages/user/Watchlater/Watchlater";
 import Movieslist from "../pages/admin/Movieslist";
 import Tvshowlists from "../pages/admin/Tvshowlists";
 import Userslist from "../pages/admin/Userslists";
+
+const ProtectedRoute = ({ element }) => {
+  const isAuthenticated = localStorage.getItem("userId"); // ✅ Check if user is logged in
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
+};
 
 const RouterComponent = ({ isAdmin }) => {
   return (
@@ -26,8 +31,10 @@ const RouterComponent = ({ isAdmin }) => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/profile" element={<MyProfile />} />
-      <Route path="/favorites" element={<Favorites />} /> {/* ✅ Correct Favorites Route */}
-      <Route path="/watchlater" element={<WatchLater />} /> {/* ✅ Correct Watch Later Route */}
+
+      {/* ✅ Protected Routes (Only for logged-in users) */}
+      <Route path="/favorites" element={<ProtectedRoute element={<Favorites />} />} />
+      <Route path="/watchlater" element={<ProtectedRoute element={<WatchLater />} />} />
 
       {/* ✅ Admin Routes */}
       {isAdmin && (

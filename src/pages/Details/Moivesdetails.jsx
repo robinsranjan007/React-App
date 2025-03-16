@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaClock } from "react-icons/fa";
+import ReviewsAndRatings from "./Reviewsandratings";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const MoviesDetails = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const userId = localStorage.getItem("userId");
+
   const [favorites, setFavorites] = useState([]);
   const [watchLater, setWatchLater] = useState([]);
 
@@ -25,10 +28,9 @@ const MoviesDetails = () => {
     }
   }, [id]);
 
-  // ✅ Fetch Movie Details from TMDb
+  // ✅ Fetch Movie Details
   const fetchMovieDetails = async () => {
     try {
-      setLoading(true);
       const response = await axios.get(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`
       );
@@ -68,7 +70,7 @@ const MoviesDetails = () => {
 
     try {
       await axios.patch(`http://localhost:5000/users/${userId}`, { likedMovies: updatedFavorites });
-      setFavorites(updatedFavorites); // ✅ Update UI immediately
+      setFavorites(updatedFavorites);
       alert("Movie added to favorites!");
     } catch (error) {
       console.error("Error adding to favorites:", error);
@@ -91,7 +93,7 @@ const MoviesDetails = () => {
 
     try {
       await axios.patch(`http://localhost:5000/users/${userId}`, { watchLater: updatedWatchLater });
-      setWatchLater(updatedWatchLater); // ✅ Update UI immediately
+      setWatchLater(updatedWatchLater);
       alert("Movie added to Watch Later!");
     } catch (error) {
       console.error("Error adding to Watch Later:", error);
@@ -118,6 +120,7 @@ const MoviesDetails = () => {
 
   return (
     <div className="bg-black min-h-screen text-white">
+      {/* Movie Banner */}
       <div className="relative w-full h-[500px]">
         <img
           src={movie.backdrop_path ? `${BACKDROP_BASE_URL}${movie.backdrop_path}` : "https://via.placeholder.com/1280x720?text=No+Image"}
@@ -127,6 +130,7 @@ const MoviesDetails = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
       </div>
 
+      {/* Movie Details */}
       <div className="px-6 py-8">
         <button
           onClick={() => navigate(-1)}
@@ -172,7 +176,7 @@ const MoviesDetails = () => {
           </div>
         </div>
 
-        {/* ✅ Favorite & Watch Later Buttons */}
+        {/* Favorite & Watch Later Buttons */}
         <div className="mt-6 flex space-x-4">
           <button
             onClick={addToFavorites}
@@ -194,6 +198,9 @@ const MoviesDetails = () => {
             <FaClock /> <span>{watchLater.some((m) => m.id === movie.id) ? "Added to Watch Later" : "Watch Later"}</span>
           </button>
         </div>
+
+        {/* Reviews & Ratings Component */}
+        <ReviewsAndRatings movieId={id} />
       </div>
     </div>
   );
